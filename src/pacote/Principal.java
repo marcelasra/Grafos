@@ -18,8 +18,14 @@ public class Principal {
         System.out.println("Busca em Largura (BFS): ");
         grafos.buscaEmLargura();
         
-        System.out.println("Busca em Profundidade (DFS): ");
+        System.out.println("\nBusca em Profundidade (DFS): ");
         grafos.buscaEmProfundidade();
+        
+        System.out.println("\nLista de Adjacência: ");
+        grafos.imprimirListaAdjacencia();
+        
+        System.out.println("\nMatriz de Adjacência: ");
+        grafos.imprimirMatrizAdjacencia();
     }
     
 }
