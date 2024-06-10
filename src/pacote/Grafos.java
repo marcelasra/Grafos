@@ -17,7 +17,7 @@ public class Grafos<TIPO> {
         this.vertices.add(novoVertice);
     }
 
-    public void AcionarAresta(Double peso, TIPO dadoInicio, TIPO dadoFim) {
+    public void adcionarAresta(Double peso, TIPO dadoInicio, TIPO dadoFim) {
         Vertice<TIPO> inicio = this.getVertice(dadoInicio);
         Vertice<TIPO> fim = this.getVertice(dadoFim);
         Aresta<TIPO> aresta = new Aresta<TIPO>(peso, inicio, fim);

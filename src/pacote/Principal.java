@@ -13,7 +13,7 @@ public class Principal {
         grafos.adcionarAresta(4.0, "Lucas", "Caio");
         grafos.adcionarAresta(1.0, "Caio", "Marcela");
         
-        grafo.buscaEmLargura();
+        grafos.buscaEmLargura();
     }
     
 }

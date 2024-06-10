@@ -18,7 +18,6 @@ public class Vertice<TIPO> {
     public void adcionarArestaSaida(Aresta<TIPO> aresta){
         this.getArestaSaida().add(aresta);
     }
-    
 
     public TIPO getDado() {
         return dado;
