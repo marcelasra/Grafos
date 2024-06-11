@@ -3,7 +3,9 @@ package pacote;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Grafos<TIPO> {
@@ -63,6 +65,119 @@ public class Grafos<TIPO> {
                 }
             }
         }
+    }
+    // Método Dijkstra
+    public Map<Vertice<TIPO>, Double> dijkstra(TIPO dadoInicio) {
+        Vertice<TIPO> inicio = getVertice(dadoInicio);
+        if (inicio == null) {
+            System.out.println("Vértice de início não encontrado.");
+            return null;
+        }
+
+        Map<Vertice<TIPO>, Double> distancias = new HashMap<>();
+        for (Vertice<TIPO> vertice : vertices) {
+            distancias.put(vertice, Double.POSITIVE_INFINITY);
+        }
+        distancias.put(inicio, 0.0);
+
+        PriorityQueue<VerticeDistancia<TIPO>> fila = new PriorityQueue<>((a, b) -> Double.compare(a.getDistancia(), b.getDistancia()));
+        fila.offer(new VerticeDistancia<>(inicio, 0.0));
+
+        while (!fila.isEmpty()) {
+            VerticeDistancia<TIPO> verticeDistancia = fila.poll();
+            Vertice<TIPO> vertice = verticeDistancia.getVertice();
+            double distancia = verticeDistancia.getDistancia();
+
+            if (distancia == distancias.get(vertice)) {
+                for (Aresta<TIPO> aresta : vertice.getArestaSaida()) {
+                    Vertice<TIPO> vizinho = aresta.getFim();
+                    double novaPeso = distancia + aresta.getPeso();
+                    if (novaPeso < distancias.get(vizinho)) {
+                        distancias.put(vizinho, novaPeso);
+                        fila.offer(new VerticeDistancia<>(vizinho, novaPeso));
+                    }
+                }
+            }
+        }
+
+        return distancias;
+    }
+
+    // Método Remover Vértice
+    public void removerVertice(TIPO dado) {
+        Vertice<TIPO> verticeRemover = getVertice(dado);
+        if (verticeRemover == null) {
+            System.out.println("Vértice não encontrado.");
+            return;
+        }
+
+        // Remover arestas de entrada
+        for (Aresta<TIPO> aresta : verticeRemover.getArestaEntrada()) {
+            Vertice<TIPO> inicio = aresta.getInicio();
+            inicio.getArestaSaida().remove(aresta);
+            arestas.remove(aresta);
+        }
+
+        // Remover arestas de saída
+        for (Aresta<TIPO> aresta : verticeRemover.getArestaSaida()) {
+            Vertice<TIPO> fim = aresta.getFim();
+            fim.getArestaEntrada().remove(aresta);
+            arestas.remove(aresta);
+        }
+
+        vertices.remove(verticeRemover);
+    }
+
+    // Método Remover Aresta
+    public void removerAresta(TIPO dadoInicio, TIPO dadoFim) {
+        Vertice<TIPO> inicio = getVertice(dadoInicio);
+        Vertice<TIPO> fim = getVertice(dadoFim);
+        if (inicio == null || fim == null) {
+            System.out.println("Vértice(s) não encontrado(s).");
+            return;
+        }
+
+        Aresta<TIPO> arestaRemover = null;
+        for (Aresta<TIPO> aresta : arestas) {
+            if (aresta.getInicio() == inicio && aresta.getFim() == fim) {
+                arestaRemover = aresta;
+                break;
+            }
+        }
+
+        if (arestaRemover == null) {
+            System.out.println("Aresta não encontrada.");
+            return;
+        }
+
+        inicio.getArestaSaida().remove(arestaRemover);
+        fim.getArestaEntrada().remove(arestaRemover);
+        arestas.remove(arestaRemover);
+    }
+
+    // Método Kruskal
+    public List<Aresta<TIPO>> kruskal() {
+        List<Aresta<TIPO>> arvoreGeradora = new ArrayList<>();
+        PriorityQueue<Aresta<TIPO>> filaArestas = new PriorityQueue<>((a, b) -> Double.compare(a.getPeso(), b.getPeso()));
+        filaArestas.addAll(arestas);
+
+        DisjointSet<Vertice<TIPO>> disjointSet = new DisjointSet<>();
+        for (Vertice<TIPO> vertice : vertices) {
+            disjointSet.makeSet(vertice);
+        }
+
+        while (!filaArestas.isEmpty() && arvoreGeradora.size() < vertices.size() - 1) {
+            Aresta<TIPO> aresta = filaArestas.poll();
+            Vertice<TIPO> inicio = aresta.getInicio();
+            Vertice<TIPO> fim = aresta.getFim();
+
+            if (disjointSet.findSet(inicio) != disjointSet.findSet(fim)) {
+                arvoreGeradora.add(aresta);
+                disjointSet.union(inicio, fim);
+            }
+        }
+
+        return arvoreGeradora;
     }
 
     public void buscaEmProfundidade(TIPO dadoInicio) {

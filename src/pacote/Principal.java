@@ -1,5 +1,8 @@
 package pacote;
 
+import java.util.List;
+import java.util.Map;
+
 public class Principal {
     public static void main(String[] args) {
         Grafos<String> grafos = new Grafos<>();
@@ -16,18 +19,30 @@ public class Principal {
         grafos.adicionarAresta(1.0, "Victoria", "Freddie");
         grafos.adicionarAresta(1.0, "Lucas", "Freddie");
 
-        System.out.println("Busca em Largura (BFS) a partir de Marcela: ");
-        grafos.buscaEmLargura("Marcela");
+        // Dijkstra
+        System.out.println("Distâncias usando Dijkstra a partir de Marcela:");
+        Map<Vertice<String>, Double> distancias = grafos.dijkstra("Marcela");
+        for (Map.Entry<Vertice<String>, Double> entry : distancias.entrySet()) {
+            System.out.println(entry.getKey().getDado() + ": " + entry.getValue());
+        }
 
-        System.out.println("\nBusca em Profundidade (DFS) a partir de Marcela: ");
-        grafos.buscaEmProfundidade("Marcela");
-
-        System.out.println("\nLista de Adjacência: ");
+        // Remover Vértice
+        grafos.removerVertice("Freddie");
+        System.out.println("\nApós remover o vértice Freddie:");
         grafos.imprimirListaAdjacencia();
 
-        System.out.println("\nMatriz de Adjacência: ");
-        grafos.imprimirMatrizAdjacencia();
+        // Remover Aresta
+        grafos.removerAresta("Marcela", "Victoria");
+        System.out.println("\nApós remover a aresta Marcela-Victoria:");
+        grafos.imprimirListaAdjacencia();
 
+        // Kruskal
+        System.out.println("\nÁrvore Geradora Mínima usando Kruskal:");
+        List<Aresta<String>> arvoreGeradora = grafos.kruskal();
+        for (Aresta<String> aresta : arvoreGeradora) {
+            System.out.println(aresta.getInicio().getDado() + " - " + aresta.getFim().getDado() + ": " + aresta.getPeso());
+        }
+        
         // Exemplo de uso da classe DisjointSet
         DisjointSet<String> disjointSet = new DisjointSet<>();
         disjointSet.makeSet("Marcela");
