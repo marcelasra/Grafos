@@ -6,17 +6,19 @@ public class Vertice<TIPO> {
     private TIPO dado;
     private ArrayList<Aresta<TIPO>> arestaEntrada;
     private ArrayList<Aresta<TIPO>> arestaSaida;
-    
-    public Vertice(TIPO valor){
+
+    public Vertice(TIPO valor) {
         this.dado = valor;
-        this.arestaEntrada = new ArrayList<Aresta<TIPO>>();
-        this.arestaSaida = new ArrayList<Aresta<TIPO>>();
+        this.arestaEntrada = new ArrayList<>();
+        this.arestaSaida = new ArrayList<>();
     }
-    public void adcionarArestaEntrada(Aresta<TIPO> aresta){
-        this.getArestaEntrada().add(aresta);
+
+    public void adicionarArestaEntrada(Aresta<TIPO> aresta) {
+        this.arestaEntrada.add(aresta);
     }
-    public void adcionarArestaSaida(Aresta<TIPO> aresta){
-        this.getArestaSaida().add(aresta);
+
+    public void adicionarArestaSaida(Aresta<TIPO> aresta) {
+        this.arestaSaida.add(aresta);
     }
 
     public TIPO getDado() {
